@@ -30,9 +30,9 @@ const MenuPage = async () => {
             <p className="text-sm my-8">{category.desc}</p>
             <button
               className={`hidden 2xl:block bg-${
-                category.color !== "black" ? category.color : "black"
+                category.color === "white" ? category.color : "black"
               } text-${
-                category.color === "black" ? "white" : "red-500"
+                category.color === "black" ? "white" : category.color
               } py-2 px-4 rounded-md`}
             >
               Explore
