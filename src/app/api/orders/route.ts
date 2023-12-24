@@ -5,12 +5,12 @@ import { getAuthSession } from "@/utils/auth";
 //fetch all orders
 export const GET = async (req: NextRequest) => {
   const session = await getAuthSession();
-  console.log(session);
+
   if (session) {
     try {
       if (session.user.isAdmin) {
         const orders = await prisma.order.findMany();
-        console.log("ORDERS : " + orders);
+
         return new NextResponse(JSON.stringify(orders), { status: 200 });
       }
       const orders = await prisma.order.findMany({

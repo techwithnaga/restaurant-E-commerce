@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 const OrdersPage = () => {
   const { data: session, status } = useSession();
@@ -26,8 +27,8 @@ const OrdersPage = () => {
   const mutation = useMutation({
     mutationFn: ({ id, status }: { id: String; status: string }) => {
       return fetch(`http://localhost:3000/api/orders/${id}`, {
+        method: "PUT",
         headers: {
-          method: "PUT",
           "content-type": "application/json",
         },
         body: JSON.stringify(status),
@@ -45,7 +46,9 @@ const OrdersPage = () => {
     const form = e.target as HTMLFormElement;
     const input = form.elements[0] as HTMLFormElement;
     const status = input.value;
+    console.log(id);
     mutation.mutate({ id, status });
+    toast.success("Order status has been changed!");
   };
 
   return (
@@ -62,7 +65,11 @@ const OrdersPage = () => {
         </thead>
         <tbody>
           {data.map((item: OrderType) => (
-            <tr className="text-sm md:text-base bg-red-50">
+            <tr
+              className={`text-sm md:text-base ${
+                item.status !== "delivered" && "bg-red-50"
+              }`}
+            >
               <td className="hidden md:block py-6 px-1">{item.id}</td>
               <td className="py-6 px-1">{item.createdAt.slice(0, 10)}</td>
               <td className="py-6 px-1">{item.price}</td>
